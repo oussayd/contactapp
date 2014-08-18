@@ -7,6 +7,7 @@ function addContact() {
 function editContact(id) {
 
        $.get("get/" + id, function(result) {
+    	   
               $("#contactDialog").html(result);
               $('#contactDialog').dialog("option", "title", 'Edit Contact');
               $("#contactDialog").dialog('open');
