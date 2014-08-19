@@ -2,6 +2,8 @@ package com.anc.nda.contactapp.service;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
+
 import com.anc.nda.contactapp.model.Contact;
 
 public interface ContactService {
@@ -9,6 +11,7 @@ public interface ContactService {
 	/*
 	 * CREATE and UPDATE
 	 */
+	@Secured("ROLE_ADMIN")
 	public void saveContact(Contact contact); // create and update
 
 	/*
@@ -21,6 +24,7 @@ public interface ContactService {
 	/*
 	 * DELETE
 	 */
+	@Secured("ROLE_ADMIN")
 	public void deleteContact(Long id);
 
 	

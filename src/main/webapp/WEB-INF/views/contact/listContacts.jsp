@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="security"%>
 <html>
 <head>
 <title>List Of Contacts</title>
@@ -23,15 +25,20 @@ th {
 <body>
 	<div style="width: 95%; margin: 0 auto;">
 
-		<div id="contactDialog" style="display: none;">
-			<%@ include file="contactForm.jsp"%>
-		</div>
-
+		<security:authorize ifAllGranted="ROLE_ADMIN">
+			<div id="contactDialog" style="display: none;">
+				<%@ include file="contactForm.jsp"%>
+			</div>
+		</security:authorize>
 		<h1>List Of Contacts</h1>
 
-		<button class="pure-button pure-button-primary" onclick="addContact()">
-			<i class="fa fa-plus"></i> Add Contact
-		</button>
+		<security:authorize ifAllGranted="ROLE_ADMIN">
+
+			<button class="pure-button pure-button-primary"
+				onclick="addContact()">
+				<i class="fa fa-plus"></i> Add Contact
+			</button>
+		</security:authorize>
 		<br>
 		<table class="pure-table pure-table-bordered pure-table-striped">
 			<thead>
@@ -45,7 +52,8 @@ th {
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${contactList}" var="contact" varStatus="loopCounter">
+				<c:forEach items="${contactList}" var="contact"
+					varStatus="loopCounter">
 					<tr>
 						<td><c:out value="${loopCounter.count}" /></td>
 						<td><c:out value="${contact.nom}" /></td>
@@ -54,6 +62,8 @@ th {
 						<td><c:out value="${contact.email}" /></td>
 
 						<td><nobr>
+								<security:authorize ifAllGranted="ROLE_ADMIN">
+						
 								<button onclick="editContact(${contact.id});"
 									class="pure-button pure-button-primary">
 									<i class="fa fa-pencil"></i> Edit
@@ -64,6 +74,7 @@ th {
 									onclick="return confirm('Are you sure you want to delete this contact?');">
 									<i class="fa fa-times"></i>Delete
 								</a>
+								</security:authorize>
 							</nobr></td>
 					</tr>
 				</c:forEach>
