@@ -23,7 +23,31 @@ th {
 </head>
 
 <body>
+
 	<div style="width: 95%; margin: 0 auto;">
+		<security:authorize ifAllGranted="ROLE_USER">
+			<div align="right">
+				<!-- For login user -->
+				<c:url value="/j_spring_security_logout" var="logoutUrl" />
+				<form action="${logoutUrl}" method="post" id="logoutForm">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</form>
+				<script>
+			function formSubmit() {
+				document.getElementById("logoutForm").submit();
+			}
+		</script>
+
+				<c:if test="${pageContext.request.userPrincipal.name != null}">
+					<h4>
+						User : ${pageContext.request.userPrincipal.name} | <a
+							href="javascript:formSubmit()"> Logout</a>
+					</h4>
+				</c:if>
+			</div>
+		</security:authorize>
+
 
 		<security:authorize ifAllGranted="ROLE_ADMIN">
 			<div id="contactDialog" style="display: none;">
@@ -63,17 +87,17 @@ th {
 
 						<td><nobr>
 								<security:authorize ifAllGranted="ROLE_ADMIN">
-						
-								<button onclick="editContact(${contact.id});"
-									class="pure-button pure-button-primary">
-									<i class="fa fa-pencil"></i> Edit
-								</button>
 
-								<a href="delete/${contact.id}"
-									class="pure-button pure-button-primary"
-									onclick="return confirm('Are you sure you want to delete this contact?');">
-									<i class="fa fa-times"></i>Delete
-								</a>
+									<button onclick="editContact(${contact.id});"
+										class="pure-button pure-button-primary">
+										<i class="fa fa-pencil"></i> Edit
+									</button>
+
+									<a href="delete/${contact.id}"
+										class="pure-button pure-button-primary"
+										onclick="return confirm('Are you sure you want to delete this contact?');">
+										<i class="fa fa-times"></i>Delete
+									</a>
 								</security:authorize>
 							</nobr></td>
 					</tr>

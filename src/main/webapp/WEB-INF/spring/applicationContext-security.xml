@@ -9,17 +9,41 @@
 
 
 	<http auto-config="true">
-		<intercept-url pattern="/**" access="ROLE_USER" />
+	
+		<intercept-url pattern="/contact/**" access="ROLE_USER" />
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<!-- access denied page -->
+		<access-denied-handler error-page="/403" />
+
+		<form-login login-page="/login" default-target-url="/contact/listContacts"
+			authentication-failure-url="/login?error" username-parameter="username"
+			password-parameter="password" />
+		<logout logout-success-url="/login?logout" />
+		<!-- enable csrf protection -->
+		<csrf />
+
 	</http>
 
 	<authentication-manager>
+
 		<authentication-provider>
-			<user-service>
-				<user name="admin" password="mdp4admin" authorities="ROLE_ADMIN,ROLE_USER" />
-				<user name="tudu" password="mdp4tudu" authorities="ROLE_USER" />
-			</user-service>
+
+			<jdbc-user-service data-source-ref="dataSource"
+				authorities-by-username-query="SELECT username, authority FROM authorities WHERE username = ?"
+				users-by-username-query="SELECT username, password, enabled FROM users WHERE username = ?" />
+
+
 		</authentication-provider>
+
+
+
+		<!-- <authentication-provider> -->
+		<!-- <user-service> -->
+		<!-- <user name="admin" password="mdp4admin" authorities="ROLE_ADMIN,ROLE_USER" 
+			/> -->
+		<!-- <user name="tudu" password="mdp4tudu" authorities="ROLE_USER" /> -->
+		<!-- </user-service> -->
+		<!-- </authentication-provider> -->
 	</authentication-manager>
 
 </beans:beans>
